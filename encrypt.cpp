@@ -30,3 +30,51 @@ uint_fast32_t* splitCipher(uint_fast32_t* in) {
     }
     return in;
 }
+
+uint_fast32_t *makeRoundKey(uint_fast32_t *key) {
+    substitute(key);
+    rotate(key);
+    mix(key);
+    return key;
+}
+uint_fast32_t *rotate(uint_fast32_t *key) {
+    uint_fast32_t temp = key[3];
+    key[3] = key[1];
+    key[1] = temp;
+    return key;
+}
+
+uint_fast32_t *mix(uint_fast32_t *key) {
+    return nullptr;
+}
+
+uint_fast32_t *substitute(uint_fast32_t *key) {
+    return nullptr;
+}
+
+uint_fast8_t lookup(uint_fast8_t &byte) {
+    unsigned int frontNibble = 0xF0, rearNibble = 0x0F;
+    frontNibble = (frontNibble & byte) >> 4;
+    rearNibble = rearNibble & byte;
+    return num::table[frontNibble][rearNibble];
+}
+
+uint_fast32_t *addRoundKey(const uint_fast32_t *key, uint_fast32_t *text) {
+    for (int i = 0; i < 4; i++){
+        text[i] = key[i] ^ text[i];
+    }
+    return text;
+}
+
+uint_fast32_t *encrypt(uint_fast32_t *key, uint_fast32_t *text) {
+    uint_fast32_t copy[4];//do not change original key so we can send to recipient
+    uint_fast32_t* next = copy;//for pointer reasons lol
+    for(int i = 0; i < 4; i++){
+        next[i] = key[i];
+    }
+    for (int i = 0; i < 11; i++){
+        text = addRoundKey(next, text);
+        next = makeRoundKey(next);
+    }
+    return nullptr;
+}
