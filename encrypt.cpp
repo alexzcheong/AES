@@ -5,7 +5,7 @@
 #include <random>
 #include <inttypes.h>
 typedef std::mt19937 MyRNG;
-uint32_t seed_val = 0x19EE448F;
+uint32_t seed_val = 0x19EE448F;//random seed value
 MyRNG rng;
 void initialize()
 {
@@ -20,7 +20,7 @@ uint_fast32_t* splitCipher(uint_fast32_t* in) {
     for(uint_fast32_t quarter : ciphersplit){
         for(int i = 0; i < 32; i++){
             int bit = gen(rng);
-            std::cout << bit;
+            //std::cout << bit;//for debugging
             quarter = quarter | bit; //last bit of quarter to rng bit
             quarter = (quarter << 1) | (quarter >> 31); // rot left by 1
         }
@@ -45,10 +45,12 @@ uint_fast32_t *rotate(uint_fast32_t *key) {
 }
 
 uint_fast32_t *mix(uint_fast32_t *key) {
+    //TODO
     return nullptr;
 }
 
 uint_fast32_t *substitute(uint_fast32_t *key) {
+    //TODO
     return nullptr;
 }
 
