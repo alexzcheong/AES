@@ -52,7 +52,7 @@ uint_fast32_t *mix(uint_fast32_t *key) {
 
 uint_fast32_t *substitute(uint_fast32_t *key) {
     uint_fast8_t *byte = (uint_fast8_t *)key;//pragye
-    for(int i = 0; i < 4; i++){
+    for(int i = 0; i < sizeof(key) / sizeof(byte); i++){
         byte[i] = lookup(byte[i]);
     }
     return key;
