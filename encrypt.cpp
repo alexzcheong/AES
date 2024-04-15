@@ -20,9 +20,8 @@ uint_fast32_t* splitCipher(uint_fast32_t* in) {
     for(uint_fast32_t quarter : ciphersplit){
         for(int i = 0; i < 32; i++){
             int bit = gen(rng);
-            std::cout << bit;
             quarter = quarter | bit; //last bit of quarter to rng bit
-            quarter = (quarter << 1) | (quarter >> 31); // rot left by 1
+            quarter = (quarter << 1); // shift left by 1
         }
         *temp = quarter;
         temp++;
@@ -38,9 +37,11 @@ uint_fast32_t *makeRoundKey(uint_fast32_t *key) {
     return key;
 }
 uint_fast32_t *rotate(uint_fast32_t *key) {
-    uint_fast32_t temp = key[3];
-    key[3] = key[0];
-    key[0] = temp;
+    for(int i = 0; i < 4; i++){
+        uint_fast32_t mask = num::MAX;
+        mask &= key[i];
+        key[i] = (key[i] << (8*i) ) | (mask >> (32 - (8*i) ) );//rotate each word left by i bytes
+    }
     return key;
 }
 
