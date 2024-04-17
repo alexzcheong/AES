@@ -63,6 +63,7 @@ uint_fast32_t* rcon(uint_fast32_t *key, int round) {
 }
 
 uint_fast32_t *mix(uint_fast32_t *state, const uint_fast32_t *key) {
+    //https://crypto.stackexchange.com/questions/2569/how-does-one-implement-the-inverse-of-aes-mixcolumns
     uint_fast8_t *keyByte = (uint_fast8_t *)key;//pragye
     uint_fast8_t *stateByte = (uint_fast8_t *)state;//pragye
     for(int i = 0 ; i < 16; i++){
