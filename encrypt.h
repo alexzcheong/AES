@@ -26,14 +26,17 @@ namespace num{
             {0xe1,	0xf8,	0x98,	0x11,	0x69,	0xd9,	0x8e,	0x94,	0x9b,	0x1e,	0x87,	0xe9,	0xce,	0x55,	0x28,	0xdf},
             {0x8c,	0xa1,	0x89,	0x0d,	0xbf,	0xe6,	0x42,	0x68,	0x41,	0x99,	0x2d,	0x0f,	0xb0,	0x54,	0xbb,	0x16}
     };
+    const uint_fast8_t roundTable[10] = {0x1, 0x2, 0x4, 0x8, 0x10, 0x20, 0x40, 0x80, 0x1b, 0x36};
 }
 
 uint_fast32_t* splitCipher(uint_fast32_t *in);//makes key for round 0
-uint_fast32_t* makeRoundKey(uint_fast32_t *key);
+uint_fast32_t* makeRoundKey(uint_fast32_t *key, int round);
 uint_fast32_t* rotate(uint_fast32_t *key);
 uint_fast32_t* substitute(uint_fast32_t *key);
-uint_fast32_t* mix(uint_fast32_t *key);
+uint_fast32_t* rcon(uint_fast32_t *key, int round);//used for key generation
+uint_fast32_t* mix(uint_fast32_t *state, const uint_fast32_t *key);//used for state encoding
 uint_fast8_t lookup(uint_fast8_t &byte);//for subbytes
 uint_fast32_t* addRoundKey(const uint_fast32_t *key, uint_fast32_t *text);
-uint_fast32_t* encrypt(uint_fast32_t *key, uint_fast32_t *text);
+uint_fast32_t* encrypt(const uint_fast32_t *key, uint_fast32_t *text);
+uint_fast32_t* processText(uint_fast32_t *state, uint_fast32_t *key);
 #endif //AES_ENCRYPT_H
