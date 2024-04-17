@@ -30,9 +30,9 @@ namespace num{
 
 uint_fast32_t* splitCipher(uint_fast32_t *in);//makes key for round 0
 uint_fast32_t* makeRoundKey(uint_fast32_t *key);
-uint_fast32_t* rotate(uint_fast32_t *key);
-uint_fast32_t* substitute(uint_fast32_t *key);
-uint_fast32_t* mix(uint_fast32_t *key);
+uint_fast32_t* rotate(uint_fast32_t *state);
+uint_fast32_t* substitute(uint_fast32_t *state);
+uint_fast32_t* mix(uint_fast32_t *state);
 uint_fast8_t lookup(uint_fast8_t &byte);//for subbytes
 uint_fast32_t* addRoundKey(const uint_fast32_t *key, uint_fast32_t *text);
 uint_fast32_t* encrypt(uint_fast32_t *key, uint_fast32_t *text);
