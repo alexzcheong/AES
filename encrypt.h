@@ -1,4 +1,10 @@
 //
+// Created by alexz on 4/20/2024.
+//
+
+#ifndef UNTITLED2_ENCRYPT_H
+#define UNTITLED2_ENCRYPT_H
+//
 // Created by me on 4/12/2024.
 //
 
@@ -27,6 +33,12 @@ namespace num{
             {0x8c,	0xa1,	0x89,	0x0d,	0xbf,	0xe6,	0x42,	0x68,	0x41,	0x99,	0x2d,	0x0f,	0xb0,	0x54,	0xbb,	0x16}
     };
     const uint_fast8_t roundTable[10] = {0x1, 0x2, 0x4, 0x8, 0x10, 0x20, 0x40, 0x80, 0x1b, 0x36};
+    const uint_fast8_t GFfield[4][4] = {
+            {0x02, 0x03, 0x1, 0x1},
+            {0x1, 0x2, 0x3, 0x1},
+            {0x1, 0x1, 0x2, 0x3},
+            {0x3, 0x1, 0x1, 0x2}
+    };
 }
 
 uint_fast32_t* splitCipher(uint_fast32_t *in);//makes key for round 0
@@ -34,9 +46,10 @@ uint_fast32_t* makeRoundKey(uint_fast32_t *key, int round);
 uint_fast32_t* rotate(uint_fast32_t *key);
 uint_fast32_t* substitute(uint_fast32_t *key);
 uint_fast32_t* rcon(uint_fast32_t *key, int round);//used for key generation
-uint_fast32_t* mix(uint_fast32_t *state, const uint_fast32_t *key);//used for state encoding
+uint_fast32_t* mix(uint_fast32_t *state);//used for state encoding
 uint_fast8_t lookup(uint_fast8_t &byte);//for subbytes
 uint_fast32_t* addRoundKey(const uint_fast32_t *key, uint_fast32_t *text);
 uint_fast32_t* encrypt(const uint_fast32_t *key, uint_fast32_t *text);
-uint_fast32_t* processText(uint_fast32_t *state, uint_fast32_t *key);
+uint_fast32_t* processText(uint_fast32_t *state);
 #endif //AES_ENCRYPT_H
+#endif //UNTITLED2_ENCRYPT_H
