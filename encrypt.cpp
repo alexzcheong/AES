@@ -55,15 +55,14 @@ uint_fast32_t *rotate(uint_fast32_t *key) {
 }
 
 uint_fast32_t* rcon(uint_fast32_t *key, int round) {
-    uint_fast8_t *byte = (uint_fast8_t *)key;//pragye
-    for(int i = 0; i < 16; i++){
-        byte[i] = byte[i] ^ num::roundTable[round - 1];//a constant derived from current round is XOR'd with the bytes in the word
+    for(int i = 0; i < 4; i++){
+        uint_fast32_t mask = key[i] & 0x00ffffff;
+        key[i] = (key[i] ^ (num::roundTable[round - 1] << 24 )) | mask;
     }
     return key;
 }
 
 uint_fast32_t *mix(uint_fast32_t *state) {
-    //https://crypto.stackexchange.com/questions/2569/how-does-one-implement-the-inverse-of-aes-mixcolumns
     //row * column:   A.B = C
     uint_fast8_t *stateByte = (uint_fast8_t *)state;//pragye
     uint_fast8_t temparr[4][4] = {0};
@@ -93,10 +92,18 @@ uint_fast32_t *mix(uint_fast32_t *state) {
 }
 
 uint_fast32_t *substitute(uint_fast32_t *key) {
-
-    uint_fast8_t *byte = (uint_fast8_t *)key;//pragye
+    uint_fast8_t *byte = new uint_fast8_t[16];
+    for(int i = 0; i < 4; i++){
+        byte[i * 4    ] = (key[i] & (0xff << 24)) >> 24;
+        byte[i * 4 + 1] = (key[i] & (0xff << 16)) >> 16;
+        byte[i * 4 + 2] = (key[i] & (0xff << 8)) >> 8;
+        byte[i * 4 + 3] = key[i] & (0xff);
+    }
     for(int i = 0; i < 16; i++){
         byte[i] = lookup(byte[i]);
+        if((i + 1) % 4 == 0){
+            key[i/4] = byte[i] | (byte[i - 1] << 8) | (byte[i - 2] << 16) | (byte[i-3] << 24);
+        }
     }
     return key;
 }
