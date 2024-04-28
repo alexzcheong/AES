@@ -64,9 +64,15 @@ uint_fast32_t* rcon(uint_fast32_t *key, int round) {
 
 uint_fast32_t *mix(uint_fast32_t *state) {
     //row * column:   A.B = C
-    uint_fast8_t *stateByte = (uint_fast8_t *)state;//pragye
+    uint_fast8_t *stateByte = new uint_fast8_t[16];
     uint_fast8_t temparr[4][4] = {0};
     uint_fast8_t multarr[4] = {0};
+    for(int i = 0; i < 4; i++){
+        stateByte[i * 4    ] = (state[i] & (0xff << 24)) >> 24;
+        stateByte[i * 4 + 1] = (state[i] & (0xff << 16)) >> 16;
+        stateByte[i * 4 + 2] = (state[i] & (0xff << 8)) >> 8;
+        stateByte[i * 4 + 3] = state[i] & (0xff);
+    }
     for(int i = 0; i < 4; i ++){
         for(int j = 0 ; j < 4; j++){
             for(int k = 0; k < 4; k++){
