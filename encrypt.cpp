@@ -67,25 +67,28 @@ uint_fast32_t *mix(uint_fast32_t *state) {
     uint_fast8_t *stateByte = new uint_fast8_t[16];
     uint_fast8_t temparr[4][4] = {0};
     uint_fast8_t multarr[4] = {0};
+    //break from uint32 into uint8
     for(int i = 0; i < 4; i++){
         stateByte[i * 4    ] = (state[i] & (0xff << 24)) >> 24;
         stateByte[i * 4 + 1] = (state[i] & (0xff << 16)) >> 16;
         stateByte[i * 4 + 2] = (state[i] & (0xff << 8)) >> 8;
         stateByte[i * 4 + 3] = state[i] & (0xff);
     }
+    //matrix multiplication
     for(int i = 0; i < 4; i ++){
         for(int j = 0 ; j < 4; j++){
             for(int k = 0; k < 4; k++){
                 //column indexes: (0, 4, 8, 12), (1, 5, 9, 13), (2, 6, 10, 14), (3, 7, 11, 15)
                 multarr[k] = stateByte[(4*k) + j];
                 uint_fast8_t mask = 0xff & multarr[k];
-                multarr[k] =  (multarr[k] << (num::GFfield[j][k] == 0x2 || num::GFfield[j][k] == 0x3) ) ^ (mask * (num::GFfield[j][k] == 0x3));
+                multarr[k] =  (multarr[k] << 2*(num::GFfield[j][k] == 0x2 || num::GFfield[j][k] == 0x3) ) ^ (mask * (num::GFfield[j][k] == 0x3));
                 if(mask & 0x80 != 0x00)
                     multarr[k] ^= 0x1b; //xor by 0x1b if leftmost bit was 1 before multiplication
             }
             temparr[i][j] = multarr[0] ^ multarr[1] ^ multarr[2] ^ multarr[3];
         }
     }
+    //recompose into uint32
     for(int i = 0; i < 4; i++){
         uint_fast32_t temp = 0x0, mask32 = 0x0;
         for(int j = 0; j < 4; j++){
