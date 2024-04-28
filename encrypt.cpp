@@ -80,7 +80,8 @@ uint_fast32_t *mix(uint_fast32_t *state) {
                 multarr[k] = stateByte[(4*k) + j];
                 uint_fast8_t mask = 0xff & multarr[k];
                 multarr[k] =  (multarr[k] << (num::GFfield[j][k] == 0x2 || num::GFfield[j][k] == 0x3) ) ^ (mask * (num::GFfield[j][k] == 0x3));
-                multarr[k] ^= (0x1b * ((mask & 0x80 ) > 0x00)); //xor by 0x1b if leftmost bit was 1 before multiplication
+                if(mask & 0x80 != 0x00)
+                    multarr[k] ^= 0x1b; //xor by 0x1b if leftmost bit was 1 before multiplication
             }
             temparr[i][j] = multarr[0] ^ multarr[1] ^ multarr[2] ^ multarr[3];
         }
