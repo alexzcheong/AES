@@ -147,7 +147,7 @@ uint_fast32_t *encrypt(const uint_fast32_t *key, uint_fast32_t *text) {
     roundKeys[0] = copy;
     addRoundKey(copy, text);//0th round for AES 128
     for (int i = 1; i < 11; i++){
-        roundKeys[i] = makeRoundKey(roundKeys[i - 1], i);//make key for current round from previous key
+        roundKeys[i] = makeRoundKey(roundKeys[i], i);//make key for current round from previous key
         processText(text);//do encryption things on text
         addRoundKey(roundKeys[i], text);//xor current round key with text
     }
