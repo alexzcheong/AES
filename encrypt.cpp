@@ -89,11 +89,9 @@ uint_fast32_t *mix(uint_fast32_t *state) {
     }
     //recompose into uint32
     for(int i = 0; i < 4; i++){
-        uint_fast32_t temp = 0x0, mask32 = 0x0;
+        uint_fast32_t temp = 0x0, mask32 = 0xffffffff;
         for(int j = 0; j < 4; j++){
-            mask32 |= temp;
-            temp |= temparr[i][j];
-            temp = (temp << 8) | (mask32 >> 24);
+            temp = (temp << 8) | temparr[i][j];
         }
         state[i] = temp;
     }
