@@ -56,7 +56,7 @@ uint_fast32_t *rotate(uint_fast32_t *key) {
 
 uint_fast32_t* rcon(uint_fast32_t *key, int round) {
     for(int i = 0; i < 4; i++){
-        key[i] = (key[i] & 0x00ffffff) | (num::roundTable[round - 1] << 24 );
+        key[i] = key[i] ^ (num::roundTable[round - 1] << 24) ;
     }
     return key;
 }
