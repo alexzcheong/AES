@@ -28,5 +28,6 @@ int main() {
     for(int i = 0; i < 4; i++){
         printf("%08" PRIx32 "\n", plaintext[i]);
     }
+    uint_32_t* out = encrypt(head, plaintext);
     return 0;
 }
